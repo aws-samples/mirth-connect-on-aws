@@ -15,7 +15,7 @@ This repository contains sample application to build resilient and higly-availab
 
 ## Architecture
 
-![Architecture - Fargate](images/mirthfargate_architecture.png)
+![Architecture](images/mirthconnectfargate-architecture.png)
 
 The sample uses the AWS Cloud Development Kit (CDK) to automate deployment of resources. The stack leverages Amazon Elastic Container Services (ECS) deployed on AWS Fargate to run containers without having to manage servers. The following resources are provisioned:
 1. Network Layer: VPC, Subnets, NLB, NAT Gateway, VPC Endpoints
