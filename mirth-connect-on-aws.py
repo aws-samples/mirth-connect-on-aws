@@ -118,7 +118,7 @@ class MirthConnectStack(Stack):
 		# Fargate Task Properties
 		# https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_ecs/ContainerImage.html
 		task_image_props=ecs_patterns.NetworkLoadBalancedTaskImageProps(
-			image=ecs.ContainerImage.from_registry("nextgenhealthcare/connect"),
+			image=ecs.ContainerImage.from_registry(cfg.REGISTRY_IMAGE),
 			container_name="mirthconnect",
 			container_ports=[
 				cfg.MIRTH_ADMIN_PORT,

@@ -11,11 +11,13 @@ VPC_CIDR = "10.23.0.0/16"
 PUBLIC_LOAD_BALANCER = True
 # Allow list of non-VPC IPs that can access the services. By default only access from within the VPC is allowed.
 ALLOWED_PEERS = {
+        "184.98.40.58/32"
         #"0.0.0.0/0", # Allow access from anywhere
     }
 
 # Fargate task defintion parameters
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html
+REGISTRY_IMAGE = "nextgenhealthcare/connect:latest"
 TASK_CPU=4096
 TASK_MEMORY_MIB=8192
 TASK_COUNT=1
