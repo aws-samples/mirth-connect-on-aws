@@ -11,9 +11,10 @@ VPC_CIDR = "10.23.0.0/16"
 PUBLIC_LOAD_BALANCER = True
 # Allow list of non-VPC IPs that can access the services. By default only access from within the VPC is allowed.
 ALLOWED_PEERS = {
-        "184.98.40.58/32"
-        #"0.0.0.0/0", # Allow access from anywhere
-    }
+    "0.0.0.0/0", # Allow access from anywhere
+}
+
+NAME_PREFIX = "mirth"
 
 # Fargate task defintion parameters
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html
@@ -25,7 +26,13 @@ AUTOSCALE_MAX_TASKS=10
 # enable exec command to allow ssh to each task for debugging
 TASK_ENABLE_EXEC_COMMAND=True
 
+#DATABASE CONFIG
+DEFAULT_DATABASE_NAME="mirthdb"
+DEFAULT_DATABASE_ADMIN_USER="admin"
+
 # mirthconnect options
+MIRTH_REPOSITORY="nextgenhealthcare/connect"
 MIRTH_ADMIN_PORT=8443
+MYSQL_PORT=3306
 MIRTH_CHANNEL_PORT=10001
 
