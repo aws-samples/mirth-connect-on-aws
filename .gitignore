@@ -4,6 +4,9 @@ __pycache__
 .pytest_cache
 .mpenv
 *.egg-info
+.DS_Store
+.mpenv
+__pycache__
 
 # CDK asset staging directory
 .cdk.staging
