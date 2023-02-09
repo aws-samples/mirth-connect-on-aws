@@ -2,7 +2,6 @@
 
 from constructs import Construct
 from aws_cdk import (
-	App,
 	CfnOutput,
 	Stack,
 	aws_ec2 as ec2,
@@ -145,8 +144,3 @@ class MirthConnectStack(Stack):
         		)
 
 		dbcluster.connections.allow_default_port_from(fargate_service.service.connections)
-
-#Initializing the stack
-app = App()
-MirthConnectStack(app, cfg.APP_NAME, description=cfg.CFN_STACK_DESCRIPTION)
-app.synth()
