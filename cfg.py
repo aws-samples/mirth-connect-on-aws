@@ -1,8 +1,13 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
 # Application Configuration
 # Note: changing the APP_NAME will result in a new stack being provisioned
-APP_NAME = "MIRTH"
+APP_NAME = "mirth-connect-on-aws"
+JDBC_CHANNEL_STACK_NAME="mirth-jdbc-channel-example"
 APP_VERSION = "version 0.1"
 CFN_STACK_DESCRIPTION = "MirthConnect on AWS (" + APP_VERSION + ")"
+CFN_JDBC_CHANNEL_STACK_DESCRIPTION = "This stack deploys JDBC to S3 (CSV) channel on Mirth with sample patient data in RDS able"
 
 # Network options
 

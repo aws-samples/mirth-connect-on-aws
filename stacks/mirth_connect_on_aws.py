@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
 
 from constructs import Construct
 from aws_cdk import (
@@ -7,6 +9,7 @@ from aws_cdk import (
 	aws_ec2 as ec2,
 	aws_ecs as ecs,
 	aws_rds as rds,
+ 	aws_iam as iam,
 	aws_ecs_patterns as ecs_patterns
 )
 import cfg
@@ -44,6 +47,7 @@ class MirthConnectStack(Stack):
 
 		dbcluster = rds.DatabaseCluster(self, "mirth-source-database",
 			engine=rds.DatabaseClusterEngine.aurora_mysql(version=rds.AuroraMysqlEngineVersion.VER_2_10_2),
+   			# engine=rds.DatabaseClusterEngine.aurora_postgres(version=rds.AuroraPostgresEngineVersion.VER_12_11),
 			credentials=rds.Credentials.from_generated_secret(cfg.DEFAULT_DATABASE_ADMIN_USER),  # Optional - will default to 'admin' username and generated password
 			default_database_name= cfg.DEFAULT_DATABASE_NAME,
 			instance_props=rds.InstanceProps(
@@ -76,7 +80,7 @@ class MirthConnectStack(Stack):
 				cfg.MIRTH_ADMIN_PORT,
 				cfg.MIRTH_CHANNEL_PORT
 			],
-			environment={
+  			environment={
             	"MIRTH_ADMIN_PORT": str(cfg.MIRTH_ADMIN_PORT),
             	"MIRTH_CHANNEL_PORT": str(cfg.MIRTH_CHANNEL_PORT),
 				"DATABASE": str('mysql'),
@@ -100,7 +104,7 @@ class MirthConnectStack(Stack):
 			# enable below to be able to exec ssh to the Fargate container
 			enable_execute_command=cfg.TASK_ENABLE_EXEC_COMMAND,
 			load_balancers=[ecs_patterns.NetworkLoadBalancerProps(
-        		name="NLB",
+        		name=cfg.NAME_PREFIX + "NLB",
         		public_load_balancer=cfg.PUBLIC_LOAD_BALANCER,
         		listeners=[
         			ecs_patterns.NetworkListenerProps(name="mirthadmin",port=cfg.MIRTH_ADMIN_PORT)
@@ -111,6 +115,8 @@ class MirthConnectStack(Stack):
     			ecs_patterns.NetworkTargetProps(listener="mirthadmin",container_port=cfg.MIRTH_ADMIN_PORT)
     		]
 		)
+  
+		CfnOutput(self, "TastExecRoleARN", value=fargate_service.task_definition.task_role.role_arn)
 
 		# Set max tasks value for Autoscaling
 		fargate_scaling_group = fargate_service.service.auto_scale_task_count(
@@ -142,5 +148,5 @@ class MirthConnectStack(Stack):
             		connection = ec2.Port.tcp(port),
             		description="Allow from " + cidr
         		)
-
+		self.fargate_service = fargate_service #adding to the main scope as we need to send cluster params to other stacks in the app
 		dbcluster.connections.allow_default_port_from(fargate_service.service.connections)
