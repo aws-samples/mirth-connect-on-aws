@@ -1,0 +1,453 @@
+<codeTemplateLibrary version="4.2.0">
+  <id>4451456d-a4a4-4b7b-98ae-e4cf711da507</id>
+  <name>FHIR Function Definition</name>
+  <revision>25</revision>
+  <lastModified>
+    <time>1681416526841</time>
+    <timezone>Etc/UTC</timezone>
+  </lastModified>
+  <description>It defines the FHIR functions to construct the FHIR payload</description>
+  <includeNewChannels>false</includeNewChannels>
+  <enabledChannelIds>
+    <string>18bf1f76-8e6c-4141-aa09-8c6f671e0582</string>
+    <string>4a12416c-56cd-426c-a711-7c529a728ad6</string>
+    <string>f29d1b79-8ed1-45a1-ab4d-2df18af5b653</string>
+    <string>61db1c7e-1d44-4a0d-af5a-7cc08964a765</string>
+    <string>bfb82818-39de-4707-b64d-7ea53f310bce</string>
+    <string>bc7efe81-964a-452f-b96c-687836ee9edd</string>
+    <string>4038db6d-7091-44e8-9a37-d72c4f56117d</string>
+    <string>9058847a-f295-4531-a3f5-a85bed025914</string>
+  </enabledChannelIds>
+  <disabledChannelIds>
+    <string>b85a4b06-7e15-4e57-b5ad-43efa2270e02</string>
+    <string>469fda88-05b9-4fb6-a0c2-1bfb8c8d1c9f</string>
+    <string>ca414f9e-b814-4d29-a432-461f009281c5</string>
+  </disabledChannelIds>
+  <codeTemplates>
+    <codeTemplate version="4.2.0">
+      <id>9cb70ef1-30e6-4b0d-b182-2dde4047f821</id>
+      <name>createAddress</name>
+      <revision>2</revision>
+      <lastModified>
+        <time>1679321286105</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createAddress (use,type,text,line,city,district,state,postalCode,country,period) {
+	if (use &amp;&amp; type) { //required parameters
+		var retValue = {};
+		if (use) retValue.use = use;
+		if (type) retValue.type = type;
+		if (text) retValue.text = text;
+		if (line) retValue.line = line;
+		if (city) retValue.city = city;
+		if (district) retValue.district = district;
+		if (state) retValue.state = state;
+		if (postalCode) retValue.postalCode = postalCode;
+		if (country) retValue.country = country;
+		if (period) retValue.period = period;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>cd5d3cdf-5454-4f7d-b947-da2bbdc0c7d9</id>
+      <name>createCodeableConcept</name>
+      <revision>4</revision>
+      <lastModified>
+        <time>1679322021403</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createCodeableConcept (coding,text) {
+	if (coding || text) {
+		var retValue = {};
+		if (coding) retValue.coding = coding;
+		if (text) retValue.text = text;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>a80b20b5-82b5-4541-bda6-d4ba7dfe78a2</id>
+      <name>createCoding</name>
+      <revision>5</revision>
+      <lastModified>
+        <time>1679100708704</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createCoding (system, version, code, display, userSelected) {
+	if (system || version || code || display || userSelected) {
+		var retValue = {};
+		if (system) retValue.system = system;
+		if (version) retValue.version = version;
+		if (code) retValue.code = code;
+		if (display) retValue.display = display;
+		if (userSelected) retValue.userSelected = userSelected;
+		return retValue
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>cdcd3174-0dc1-40f5-90a6-2b944687472d</id>
+      <name>createCommunication</name>
+      <revision>2</revision>
+      <lastModified>
+        <time>1679106322118</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createCommunication (language,preferred) {
+	if (language || preferred) {
+		var retValue = {};
+		if (language) retValue.language = language;
+		if (preferred) retValue.preferred = preferred;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>1825cf2e-ba48-4381-ac63-ec0bc9e59de2</id>
+      <name>createContact</name>
+      <revision>2</revision>
+      <lastModified>
+        <time>1679323403433</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createContact (relationship,name,telecom,address,gender,organization,period) {
+	if (relationship&amp;&amp;name&amp;&amp;address) {
+		var retValue = {};
+		if (relationship) retValue.relationship = relationship;
+		if (name) retValue.name = name;
+		if (telecom) retValue.telecom = telecom;
+		if (address) retValue.address = address;
+		if (gender) retValue.gender = gender;
+		if (organization) retValue.organization = organization;
+		if (period) retValue.period = period;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>885e0bb6-3cb5-4daf-9b00-4320b9baaa7e</id>
+      <name>createGender</name>
+      <revision>4</revision>
+      <lastModified>
+        <time>1681419531100</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createGender(gender) {
+	var retValue = &quot;&quot;
+	//logger.info(&quot;GENDER IS: &quot; + gender)
+	if (gender) {
+		switch (gender.toLowerCase()) {
+			case &quot;m&quot;:
+			case &quot;male&quot;:
+			case &quot;man&quot;:
+				retValue = &quot;male&quot;;
+			break;
+			case &quot;f&quot;:
+			case &quot;female&quot;:
+			case &quot;woman&quot;:
+				retValue  = &quot;female&quot;;
+			break;
+			case &quot;o&quot;:
+			case &quot;other&quot;:
+				retValue  = &quot;other&quot;;
+			break;
+			default:
+				retValue  = &quot;unknown&quot;;
+		}
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>ef6c92e5-538d-41ff-beda-1e21bf07fa87</id>
+      <name>createIdentifier</name>
+      <revision>4</revision>
+      <lastModified>
+        <time>1679321129936</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createIdentifier (use, type, system, value, period, assigner) {
+	if (use) { //required parameter
+		var retValue = {};
+		retValue.use = use;
+		if (type) retValue.type = type;
+		if (system) retValue.system = system;
+		if (value) retValue.value = value;
+		if (period) retValue.period = period;
+		if (assigner) retValue.assigner = assigner;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>b4e923e2-648d-4901-938a-117ffa4946f1</id>
+      <name>createName</name>
+      <revision>4</revision>
+      <lastModified>
+        <time>1679332231586</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createName (use,text,family,firstName,middleName,prefix,suffix,period) {
+	if (use&amp;&amp;family&amp;&amp;(firstName||middleName)) { //required parameters
+		var retValue = {};
+		retValue.given = [];
+		if (use) retValue.use = use;
+		if (text) retValue.text = text;
+		if (family) retValue.family = family;
+		if (firstName) retValue.given.push(firstName);
+		if (middleName) retValue.given.push(middleName);
+		if (prefix) retValue.prefix = prefix;
+		if (suffix) retValue.suffix = suffix;
+		if (period) retValue.period = period;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>28144ac1-5d98-45b5-a7c3-fc8a20a83ea8</id>
+      <name>createPatient</name>
+      <revision>6</revision>
+      <lastModified>
+        <time>1679323438297</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createPatient (resourceType,id,identifier,active,name,telecom,gender,birthDate,deceased,address,maritalStatus,multipleBirth,photo,contact,communication,generalPractitioner,managingOrganization,link) {
+	if (resourceType||id||identifier||active||name||telecom||gender||birthDate||deceased||address||maritalStatus||multipleBirth||photo||contact||communication||generalPractitioner||managingOrganization||link) {
+		var retValue = {};
+		if (resourceType) retValue.resourceType = resourceType;
+		if (id) retValue.id = id;
+		if (identifier) retValue.identifier = identifier;
+		if (active) retValue.active = active;
+		if (name) retValue.name = name;
+		if (telecom) retValue.telecom = telecom;
+		if (gender) retValue.gender = gender;
+		if (birthDate) retValue.birthDate = birthDate;
+		if (deceased) retValue.deceased = deceased;
+		if (address) retValue.address = address;
+		if (maritalStatus) retValue.maritalStatus = maritalStatus;
+		if (multipleBirth) retValue.multipleBirth = multipleBirth;
+		if (photo) retValue.photo = photo;
+		if (contact) retValue.contact = contact;
+		if (communication) retValue.communication = communication;
+		if (generalPractitioner) retValue.generalPractitioner = generalPractitioner;
+		if (managingOrganization) retValue.managingOrganization = managingOrganization;
+		if (link) retValue.link = link;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>e8557c85-a1ec-4245-ac4f-6650b08d4850</id>
+      <name>createPeriod</name>
+      <revision>4</revision>
+      <lastModified>
+        <time>1679100597141</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createPeriod (start,end) {
+	if (start || end) {
+		var retValue = {};
+		if (start) retValue.start = start;
+		if (end) retValue.end = end;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>a815f5cd-4751-4616-859a-452e0b356dbe</id>
+      <name>createReference</name>
+      <revision>2</revision>
+      <lastModified>
+        <time>1679100811538</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createReference (reference, type, identifier, display) {
+	if(reference || type || identifier || display) {
+		var retValue = {};
+		if (reference) retValue.reference = reference;
+		if (type) retValue.type = type;
+		if (identifier) retValue.identifier = identifier;
+		if (display) retValue.display = display;
+		return retValue
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+    <codeTemplate version="4.2.0">
+      <id>c3899563-c59d-40d2-b9e5-8f19277f9960</id>
+      <name>createTelecom</name>
+      <revision>2</revision>
+      <lastModified>
+        <time>1679102565779</time>
+        <timezone>Etc/UTC</timezone>
+      </lastModified>
+      <contextSet>
+        <delegate>
+          <contextType>SOURCE_RECEIVER</contextType>
+          <contextType>DESTINATION_DISPATCHER</contextType>
+          <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+          <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+        </delegate>
+      </contextSet>
+      <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+        <type>FUNCTION</type>
+        <code>function createTelecom (system,value,use,rank,period) {
+	if (system||value||use||rank||period) {
+		var retValue = {};
+		if (system) retValue.system = system;
+		if (value) retValue.value = value;
+		if (use) retValue.use = use;
+		if (rank) retValue.rank = rank;
+		if (period) retValue.period = period;
+		return retValue;
+	}
+	else return null;
+}</code>
+      </properties>
+    </codeTemplate>
+  </codeTemplates>
+</codeTemplateLibrary>

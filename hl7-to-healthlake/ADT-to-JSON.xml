@@ -1,0 +1,823 @@
+<channel version="4.2.0">
+  <id>61db1c7e-1d44-4a0d-af5a-7cc08964a765</id>
+  <nextMetaDataId>6</nextMetaDataId>
+  <name>ADT-to-JSON</name>
+  <description></description>
+  <revision>10</revision>
+  <sourceConnector version="4.2.0">
+    <metaDataId>0</metaDataId>
+    <name>sourceConnector</name>
+    <properties class="com.mirth.connect.connectors.tcp.TcpReceiverProperties" version="4.2.0">
+      <pluginProperties/>
+      <listenerConnectorProperties version="4.2.0">
+        <host>0.0.0.0</host>
+        <port>5050</port>
+      </listenerConnectorProperties>
+      <sourceConnectorProperties version="4.2.0">
+        <responseVariable>Auto-generate (After source transformer)</responseVariable>
+        <respondAfterProcessing>true</respondAfterProcessing>
+        <processBatch>false</processBatch>
+        <firstResponse>true</firstResponse>
+        <processingThreads>1</processingThreads>
+        <resourceIds class="linked-hash-map">
+          <entry>
+            <string>Default Resource</string>
+            <string>[Default Resource]</string>
+          </entry>
+        </resourceIds>
+        <queueBufferSize>1000</queueBufferSize>
+      </sourceConnectorProperties>
+      <transmissionModeProperties class="com.mirth.connect.plugins.mllpmode.MLLPModeProperties">
+        <pluginPointName>MLLP</pluginPointName>
+        <startOfMessageBytes>0B</startOfMessageBytes>
+        <endOfMessageBytes>1C0D</endOfMessageBytes>
+        <useMLLPv2>false</useMLLPv2>
+        <ackBytes>06</ackBytes>
+        <nackBytes>15</nackBytes>
+        <maxRetries>2</maxRetries>
+      </transmissionModeProperties>
+      <serverMode>true</serverMode>
+      <remoteAddress></remoteAddress>
+      <remotePort></remotePort>
+      <overrideLocalBinding>false</overrideLocalBinding>
+      <reconnectInterval>5000</reconnectInterval>
+      <receiveTimeout>0</receiveTimeout>
+      <bufferSize>65536</bufferSize>
+      <maxConnections>10</maxConnections>
+      <keepConnectionOpen>true</keepConnectionOpen>
+      <dataTypeBinary>false</dataTypeBinary>
+      <charsetEncoding>DEFAULT_ENCODING</charsetEncoding>
+      <respondOnNewConnection>0</respondOnNewConnection>
+      <responseAddress></responseAddress>
+      <responsePort></responsePort>
+    </properties>
+    <transformer version="4.2.0">
+      <elements>
+        <com.mirth.connect.plugins.javascriptstep.JavaScriptStep version="4.2.0">
+          <name>Step1</name>
+          <sequenceNumber>0</sequenceNumber>
+          <enabled>true</enabled>
+          <script>var objJSON = {};
+var objMSH = {};
+var objPID = {};
+var objEVN = {};
+var objNK1 = [];
+var objPV1 = {};
+var objOBX = [];
+
+objMSH.sendApp = msg[&apos;MSH&apos;][&apos;MSH.4&apos;][&apos;MSH.4.1&apos;].toString();
+objMSH.id = msg[&apos;MSH&apos;][&apos;MSH.10&apos;][&apos;MSH.10.1&apos;].toString();
+objMSH.type = msg[&apos;MSH&apos;][&apos;MSH.9&apos;][&apos;MSH.9.2&apos;].toString();
+objMSH.dayTime = msg[&apos;MSH&apos;][&apos;MSH.7&apos;][&apos;MSH.7.1&apos;].toString();
+
+objPID.id1 = msg[&apos;PID&apos;][&apos;PID.3&apos;][&apos;PID.3.1&apos;].toString(); 
+objPID.assignAuth1 = msg[&apos;PID&apos;][&apos;PID.3&apos;][&apos;PID.3.4&apos;].toString(); 
+objPID.lastName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString(); 
+objPID.firstName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString(); 
+objPID.middleName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.3&apos;].toString(); 
+objPID.motherMaidenName = msg[&apos;PID&apos;][&apos;PID.6&apos;][&apos;PID.6.1&apos;].toString();
+objPID.dob = msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString(); 
+objPID.gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
+objPID.address = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString();
+objPID.address2 = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString();
+objPID.city = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString();
+objPID.state = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString();
+objPID.zip = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString();
+objPID.country = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.6&apos;].toString();
+objPID.county = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.9&apos;].toString();
+objPID.homePhone = msg[&apos;PID&apos;][&apos;PID.13&apos;][&apos;PID.13.1&apos;].toString();
+objPID.workPhone = msg[&apos;PID&apos;][&apos;PID.14&apos;][&apos;PID.14.1&apos;].toString();
+objPID.language = msg[&apos;PID&apos;][&apos;PID.15&apos;][&apos;PID.15.1&apos;].toString();
+objPID.maritalStatus = msg[&apos;PID&apos;][&apos;PID.16&apos;][&apos;PID.16.1&apos;].toString();
+objPID.religion = msg[&apos;PID&apos;][&apos;PID.17&apos;][&apos;PID.17.1&apos;].toString();
+objPID.id2 = msg[&apos;PID&apos;][&apos;PID.18&apos;][&apos;PID.18.1&apos;].toString();
+objPID.assignAuth2 = msg[&apos;PID&apos;][&apos;PID.18&apos;][&apos;PID.18.4&apos;].toString();
+//objPID.SSN = msg[&apos;PID&apos;][&apos;PID.19&apos;][&apos;PID.19.1&apos;].toString(); only for v 2.7 or below
+//objPID.DL = msg[&apos;PID&apos;][&apos;PID.20&apos;][&apos;PID.20.1&apos;].toString(); only for v 2.5 or below
+
+objEVN.type = msg[&apos;EVN&apos;][&apos;EVN.1&apos;][&apos;EVN.1.1&apos;].toString();
+objEVN.recDayTime = msg[&apos;EVN&apos;][&apos;EVN.2&apos;][&apos;EVN.2.1&apos;].toString();
+objEVN.planDayTime = msg[&apos;EVN&apos;][&apos;EVN.3&apos;][&apos;EVN.3.1&apos;].toString();
+objEVN.reasonCode = msg[&apos;EVN&apos;][&apos;EVN.4&apos;][&apos;EVN.4.1&apos;].toString();
+objEVN.occDayTime = msg[&apos;EVN&apos;][&apos;EVN.6&apos;][&apos;EVN.6.1&apos;].toString();
+
+
+for each(seg in msg.NK1) {
+	var itemNK1 = {};
+	itemNK1.lastName = seg[&apos;NK1.2&apos;][&apos;NK1.2.1&apos;].toString();
+	itemNK1.firstName = seg[&apos;NK1.2&apos;][&apos;NK1.2.2&apos;].toString();
+	itemNK1.relation = seg[&apos;NK1.3&apos;][&apos;NK1.3.1&apos;].toString();
+	itemNK1.address = seg[&apos;NK1.4&apos;][&apos;NK1.4.1&apos;].toString();
+	itemNK1.city = seg[&apos;NK1.4&apos;][&apos;NK1.4.3&apos;].toString();
+	itemNK1.state = seg[&apos;NK1.4&apos;][&apos;NK1.4.4&apos;].toString();
+	itemNK1.zip = seg[&apos;NK1.4&apos;][&apos;NK1.4.5&apos;].toString();
+	itemNK1.country = seg[&apos;NK1.4&apos;][&apos;NK1.4.6&apos;].toString();
+	itemNK1.county = seg[&apos;NK1.4&apos;][&apos;NK1.4.9&apos;].toString();
+	itemNK1.homePhone = seg[&apos;NK1.5&apos;][&apos;NK1.5.1&apos;].toString();
+	itemNK1.workPhone = seg[&apos;NK1.6&apos;][&apos;NK1.6.1&apos;].toString();
+	itemNK1.roleID = seg[&apos;NK1.7&apos;][&apos;NK1.7.1&apos;].toString();
+	itemNK1.startDate = seg[&apos;NK1.8&apos;][&apos;NK1.8.1&apos;].toString();
+	itemNK1.endDate = seg[&apos;NK1.9&apos;][&apos;NK1.9.1&apos;].toString();
+	itemNK1.maritalStatus = seg[&apos;NK1.14&apos;][&apos;NK1.14.1&apos;].toString();
+	itemNK1.gender = seg[&apos;NK1.15&apos;][&apos;NK1.15.1&apos;].toString();
+	itemNK1.dob = seg[&apos;NK1.16&apos;][&apos;NK1.16.1&apos;].toString();
+	itemNK1.primaryLanguage = seg[&apos;NK1.16&apos;][&apos;NK1.16.1&apos;].toString();
+	objNK1.push(itemNK1); 
+	}
+
+objPV1.cls = msg[&apos;PV1&apos;][&apos;PV1.2&apos;][&apos;PV1.2.1&apos;].toString(); 
+objPV1.poc = msg[&apos;PV1&apos;][&apos;PV1.3&apos;][&apos;PV1.3.1&apos;].toString();
+objPV1.room = msg[&apos;PV1&apos;][&apos;PV1.3&apos;][&apos;PV1.3.2&apos;].toString();
+objPV1.bed = msg[&apos;PV1&apos;][&apos;PV1.3&apos;][&apos;PV1.3.3&apos;].toString();
+objPV1.facility = msg[&apos;PV1&apos;][&apos;PV1.3&apos;][&apos;PV1.3.4&apos;].toString();
+objPV1.attdDocID = msg[&apos;PV1&apos;][&apos;PV1.7&apos;][&apos;PV1.7.1&apos;].toString();
+objPV1.attdDocLastName = msg[&apos;PV1&apos;][&apos;PV1.7&apos;][&apos;PV1.7.2&apos;].toString();
+objPV1.attdDocFirstName = msg[&apos;PV1&apos;][&apos;PV1.7&apos;][&apos;PV1.7.3&apos;].toString();
+objPV1.refDocID = msg[&apos;PV1&apos;][&apos;PV1.8&apos;][&apos;PV1.8.1&apos;].toString();
+objPV1.refDocLastName = msg[&apos;PV1&apos;][&apos;PV1.8&apos;][&apos;PV1.8.2&apos;].toString();
+objPV1.refDocFirstName = msg[&apos;PV1&apos;][&apos;PV1.8&apos;][&apos;PV1.8.3&apos;].toString();
+objPV1.admtDocID = msg[&apos;PV1&apos;][&apos;PV1.17&apos;][&apos;PV1.17.1&apos;].toString();
+objPV1.admtDocLastName = msg[&apos;PV1&apos;][&apos;PV1.17&apos;][&apos;PV1.17.2&apos;].toString();
+objPV1.admtDocFirstName = msg[&apos;PV1&apos;][&apos;PV1.17&apos;][&apos;PV1.17.3&apos;].toString();
+objPV1.admtDayTime = msg[&apos;PV1&apos;][&apos;PV1.44&apos;][&apos;PV1.44.1&apos;].toString();
+
+for each(seg in msg.OBX) {
+	var itemOBX = {};
+		itemOBX.type = seg[&apos;OBX.2&apos;][&apos;OBX.2.1&apos;].toString();
+		itemOBX.id = seg[&apos;OBX.3&apos;][&apos;OBX.3.1&apos;].toString();
+		itemOBX.description = seg[&apos;OBX.3&apos;][&apos;OBX.3.2&apos;].toString();
+		itemOBX.value = seg[&apos;OBX.5&apos;][&apos;OBX.5.1&apos;].toString();
+		itemOBX.uom = seg[&apos;OBX.6&apos;][&apos;OBX.6.1&apos;].toString();
+		itemOBX.status = seg[&apos;OBX.11&apos;][&apos;OBX.11.1&apos;].toString();
+		itemOBX.dayTime = seg[&apos;OBX.14&apos;][&apos;OBX.14.1&apos;].toString();
+		objOBX.push(itemOBX);
+	}
+
+objJSON.MSH = objMSH;
+objJSON.PID = objPID;
+objJSON.EVN = objEVN;
+objJSON.NK1 = objNK1;
+objJSON.PV1 = objPV1;
+objJSON.OBX = objOBX;
+
+msg = JSON.stringify(objJSON);
+//logger.info(msg);</script>
+        </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+      </elements>
+      <inboundTemplate encoding="base64"></inboundTemplate>
+      <outboundTemplate encoding="base64"></outboundTemplate>
+      <inboundDataType>HL7V2</inboundDataType>
+      <outboundDataType>JSON</outboundDataType>
+      <inboundProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DataTypeProperties" version="4.2.0">
+        <serializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2SerializationProperties" version="4.2.0">
+          <handleRepetitions>true</handleRepetitions>
+          <handleSubcomponents>true</handleSubcomponents>
+          <useStrictParser>false</useStrictParser>
+          <useStrictValidation>false</useStrictValidation>
+          <stripNamespaces>false</stripNamespaces>
+          <segmentDelimiter>\r</segmentDelimiter>
+          <convertLineBreaks>true</convertLineBreaks>
+        </serializationProperties>
+        <deserializationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2DeserializationProperties" version="4.2.0">
+          <useStrictParser>false</useStrictParser>
+          <useStrictValidation>false</useStrictValidation>
+          <segmentDelimiter>\r</segmentDelimiter>
+        </deserializationProperties>
+        <batchProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2BatchProperties" version="4.2.0">
+          <splitType>MSH_Segment</splitType>
+          <batchScript></batchScript>
+        </batchProperties>
+        <responseGenerationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseGenerationProperties" version="4.2.0">
+          <segmentDelimiter>\r</segmentDelimiter>
+          <successfulACKCode>AA</successfulACKCode>
+          <successfulACKMessage></successfulACKMessage>
+          <errorACKCode>AE</errorACKCode>
+          <errorACKMessage>An Error Occurred Processing Message.</errorACKMessage>
+          <rejectedACKCode>AR</rejectedACKCode>
+          <rejectedACKMessage>Message Rejected.</rejectedACKMessage>
+          <msh15ACKAccept>false</msh15ACKAccept>
+          <dateFormat>yyyyMMddHHmmss.SSS</dateFormat>
+        </responseGenerationProperties>
+        <responseValidationProperties class="com.mirth.connect.plugins.datatypes.hl7v2.HL7v2ResponseValidationProperties" version="4.2.0">
+          <successfulACKCode>AA,CA</successfulACKCode>
+          <errorACKCode>AE,CE</errorACKCode>
+          <rejectedACKCode>AR,CR</rejectedACKCode>
+          <validateMessageControlId>true</validateMessageControlId>
+          <originalMessageControlId>Destination_Encoded</originalMessageControlId>
+          <originalIdMapVariable></originalIdMapVariable>
+        </responseValidationProperties>
+      </inboundProperties>
+      <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.2.0">
+        <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.2.0">
+          <splitType>JavaScript</splitType>
+          <batchScript></batchScript>
+        </batchProperties>
+      </outboundProperties>
+    </transformer>
+    <filter version="4.2.0">
+      <elements>
+        <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule version="4.2.0">
+          <name>Accept message if &quot;msg[&apos;MSH&apos;][&apos;MSH.9&apos;][&apos;MSH.9.1&apos;].toString()&quot; equals &quot;ADT&quot;</name>
+          <sequenceNumber>0</sequenceNumber>
+          <enabled>true</enabled>
+          <field>msg[&apos;MSH&apos;][&apos;MSH.9&apos;][&apos;MSH.9.1&apos;].toString()</field>
+          <condition>EQUALS</condition>
+          <values>
+            <string>&quot;ADT&quot;</string>
+          </values>
+        </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+      </elements>
+    </filter>
+    <transportName>TCP Listener</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <waitForPrevious>true</waitForPrevious>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector version="4.2.0">
+      <metaDataId>5</metaDataId>
+      <name>To Get-2 Channel</name>
+      <properties class="com.mirth.connect.connectors.vm.VmDispatcherProperties" version="4.2.0">
+        <pluginProperties/>
+        <destinationConnectorProperties version="4.2.0">
+          <queueEnabled>false</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterTransformer>false</includeFilterTransformer>
+          <threadCount>1</threadCount>
+          <threadAssignmentVariable></threadAssignmentVariable>
+          <validateResponse>false</validateResponse>
+          <resourceIds class="linked-hash-map">
+            <entry>
+              <string>Default Resource</string>
+              <string>[Default Resource]</string>
+            </entry>
+          </resourceIds>
+          <queueBufferSize>1000</queueBufferSize>
+          <reattachAttachments>true</reattachAttachments>
+        </destinationConnectorProperties>
+        <channelId>f29d1b79-8ed1-45a1-ab4d-2df18af5b653</channelId>
+        <channelTemplate>${message.encodedData}</channelTemplate>
+        <mapVariables/>
+      </properties>
+      <transformer version="4.2.0">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.2.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.2.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.2.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.2.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </transformer>
+      <responseTransformer version="4.2.0">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.2.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.2.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="4.2.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="4.2.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </responseTransformer>
+      <filter version="4.2.0">
+        <elements/>
+      </filter>
+      <transportName>Channel Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <waitForPrevious>true</waitForPrevious>
+    </connector>
+  </destinationConnectors>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+// Responses returned from here will be stored as &quot;Postprocessor&quot; in the response map
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <undeployScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</undeployScript>
+  <properties version="4.2.0">
+    <clearGlobalChannelMap>true</clearGlobalChannelMap>
+    <messageStorageMode>DEVELOPMENT</messageStorageMode>
+    <encryptData>false</encryptData>
+    <removeContentOnCompletion>false</removeContentOnCompletion>
+    <removeOnlyFilteredOnCompletion>false</removeOnlyFilteredOnCompletion>
+    <removeAttachmentsOnCompletion>false</removeAttachmentsOnCompletion>
+    <initialState>STARTED</initialState>
+    <storeAttachments>true</storeAttachments>
+    <metaDataColumns>
+      <metaDataColumn>
+        <name>SOURCE</name>
+        <type>STRING</type>
+        <mappingName>mirth_source</mappingName>
+      </metaDataColumn>
+      <metaDataColumn>
+        <name>TYPE</name>
+        <type>STRING</type>
+        <mappingName>mirth_type</mappingName>
+      </metaDataColumn>
+    </metaDataColumns>
+    <attachmentProperties version="4.2.0">
+      <type>None</type>
+      <properties/>
+    </attachmentProperties>
+    <resourceIds class="linked-hash-map">
+      <entry>
+        <string>Default Resource</string>
+        <string>[Default Resource]</string>
+      </entry>
+    </resourceIds>
+  </properties>
+  <exportData>
+    <metadata>
+      <enabled>true</enabled>
+      <lastModified>
+        <time>1682600401151</time>
+        <timezone>America/Indianapolis</timezone>
+      </lastModified>
+      <pruningSettings>
+        <pruneMetaDataDays>30</pruneMetaDataDays>
+        <pruneContentDays>30</pruneContentDays>
+        <archiveEnabled>true</archiveEnabled>
+        <pruneErroredMessages>true</pruneErroredMessages>
+      </pruningSettings>
+      <userId>1</userId>
+    </metadata>
+    <codeTemplateLibraries>
+      <codeTemplateLibrary version="4.2.0">
+        <id>4451456d-a4a4-4b7b-98ae-e4cf711da507</id>
+        <name>FHIR Function Definition</name>
+        <revision>25</revision>
+        <lastModified>
+          <time>1681416526841</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <description>It defines the FHIR functions to construct the FHIR payload</description>
+        <includeNewChannels>false</includeNewChannels>
+        <enabledChannelIds>
+          <string>18bf1f76-8e6c-4141-aa09-8c6f671e0582</string>
+          <string>4a12416c-56cd-426c-a711-7c529a728ad6</string>
+          <string>f29d1b79-8ed1-45a1-ab4d-2df18af5b653</string>
+          <string>61db1c7e-1d44-4a0d-af5a-7cc08964a765</string>
+          <string>bfb82818-39de-4707-b64d-7ea53f310bce</string>
+          <string>bc7efe81-964a-452f-b96c-687836ee9edd</string>
+          <string>4038db6d-7091-44e8-9a37-d72c4f56117d</string>
+          <string>9058847a-f295-4531-a3f5-a85bed025914</string>
+        </enabledChannelIds>
+        <disabledChannelIds>
+          <string>b85a4b06-7e15-4e57-b5ad-43efa2270e02</string>
+          <string>469fda88-05b9-4fb6-a0c2-1bfb8c8d1c9f</string>
+          <string>ca414f9e-b814-4d29-a432-461f009281c5</string>
+        </disabledChannelIds>
+        <codeTemplates>
+          <codeTemplate version="4.2.0">
+            <id>9cb70ef1-30e6-4b0d-b182-2dde4047f821</id>
+            <name>createAddress</name>
+            <revision>2</revision>
+            <lastModified>
+              <time>1679321286105</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createAddress (use,type,text,line,city,district,state,postalCode,country,period) {
+	if (use &amp;&amp; type) { //required parameters
+		var retValue = {};
+		if (use) retValue.use = use;
+		if (type) retValue.type = type;
+		if (text) retValue.text = text;
+		if (line) retValue.line = line;
+		if (city) retValue.city = city;
+		if (district) retValue.district = district;
+		if (state) retValue.state = state;
+		if (postalCode) retValue.postalCode = postalCode;
+		if (country) retValue.country = country;
+		if (period) retValue.period = period;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>cd5d3cdf-5454-4f7d-b947-da2bbdc0c7d9</id>
+            <name>createCodeableConcept</name>
+            <revision>4</revision>
+            <lastModified>
+              <time>1679322021403</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createCodeableConcept (coding,text) {
+	if (coding || text) {
+		var retValue = {};
+		if (coding) retValue.coding = coding;
+		if (text) retValue.text = text;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>a80b20b5-82b5-4541-bda6-d4ba7dfe78a2</id>
+            <name>createCoding</name>
+            <revision>5</revision>
+            <lastModified>
+              <time>1679100708704</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createCoding (system, version, code, display, userSelected) {
+	if (system || version || code || display || userSelected) {
+		var retValue = {};
+		if (system) retValue.system = system;
+		if (version) retValue.version = version;
+		if (code) retValue.code = code;
+		if (display) retValue.display = display;
+		if (userSelected) retValue.userSelected = userSelected;
+		return retValue
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>cdcd3174-0dc1-40f5-90a6-2b944687472d</id>
+            <name>createCommunication</name>
+            <revision>2</revision>
+            <lastModified>
+              <time>1679106322118</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createCommunication (language,preferred) {
+	if (language || preferred) {
+		var retValue = {};
+		if (language) retValue.language = language;
+		if (preferred) retValue.preferred = preferred;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>1825cf2e-ba48-4381-ac63-ec0bc9e59de2</id>
+            <name>createContact</name>
+            <revision>2</revision>
+            <lastModified>
+              <time>1679323403433</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createContact (relationship,name,telecom,address,gender,organization,period) {
+	if (relationship&amp;&amp;name&amp;&amp;address) {
+		var retValue = {};
+		if (relationship) retValue.relationship = relationship;
+		if (name) retValue.name = name;
+		if (telecom) retValue.telecom = telecom;
+		if (address) retValue.address = address;
+		if (gender) retValue.gender = gender;
+		if (organization) retValue.organization = organization;
+		if (period) retValue.period = period;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>885e0bb6-3cb5-4daf-9b00-4320b9baaa7e</id>
+            <name>createGender</name>
+            <revision>4</revision>
+            <lastModified>
+              <time>1681419531100</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createGender(gender) {
+	var retValue = &quot;&quot;
+	//logger.info(&quot;GENDER IS: &quot; + gender)
+	if (gender) {
+		switch (gender.toLowerCase()) {
+			case &quot;m&quot;:
+			case &quot;male&quot;:
+			case &quot;man&quot;:
+				retValue = &quot;male&quot;;
+			break;
+			case &quot;f&quot;:
+			case &quot;female&quot;:
+			case &quot;woman&quot;:
+				retValue  = &quot;female&quot;;
+			break;
+			case &quot;o&quot;:
+			case &quot;other&quot;:
+				retValue  = &quot;other&quot;;
+			break;
+			default:
+				retValue  = &quot;unknown&quot;;
+		}
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>ef6c92e5-538d-41ff-beda-1e21bf07fa87</id>
+            <name>createIdentifier</name>
+            <revision>4</revision>
+            <lastModified>
+              <time>1679321129936</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createIdentifier (use, type, system, value, period, assigner) {
+	if (use) { //required parameter
+		var retValue = {};
+		retValue.use = use;
+		if (type) retValue.type = type;
+		if (system) retValue.system = system;
+		if (value) retValue.value = value;
+		if (period) retValue.period = period;
+		if (assigner) retValue.assigner = assigner;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>b4e923e2-648d-4901-938a-117ffa4946f1</id>
+            <name>createName</name>
+            <revision>4</revision>
+            <lastModified>
+              <time>1679332231586</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createName (use,text,family,firstName,middleName,prefix,suffix,period) {
+	if (use&amp;&amp;family&amp;&amp;(firstName||middleName)) { //required parameters
+		var retValue = {};
+		retValue.given = [];
+		if (use) retValue.use = use;
+		if (text) retValue.text = text;
+		if (family) retValue.family = family;
+		if (firstName) retValue.given.push(firstName);
+		if (middleName) retValue.given.push(middleName);
+		if (prefix) retValue.prefix = prefix;
+		if (suffix) retValue.suffix = suffix;
+		if (period) retValue.period = period;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>28144ac1-5d98-45b5-a7c3-fc8a20a83ea8</id>
+            <name>createPatient</name>
+            <revision>6</revision>
+            <lastModified>
+              <time>1679323438297</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createPatient (resourceType,id,identifier,active,name,telecom,gender,birthDate,deceased,address,maritalStatus,multipleBirth,photo,contact,communication,generalPractitioner,managingOrganization,link) {
+	if (resourceType||id||identifier||active||name||telecom||gender||birthDate||deceased||address||maritalStatus||multipleBirth||photo||contact||communication||generalPractitioner||managingOrganization||link) {
+		var retValue = {};
+		if (resourceType) retValue.resourceType = resourceType;
+		if (id) retValue.id = id;
+		if (identifier) retValue.identifier = identifier;
+		if (active) retValue.active = active;
+		if (name) retValue.name = name;
+		if (telecom) retValue.telecom = telecom;
+		if (gender) retValue.gender = gender;
+		if (birthDate) retValue.birthDate = birthDate;
+		if (deceased) retValue.deceased = deceased;
+		if (address) retValue.address = address;
+		if (maritalStatus) retValue.maritalStatus = maritalStatus;
+		if (multipleBirth) retValue.multipleBirth = multipleBirth;
+		if (photo) retValue.photo = photo;
+		if (contact) retValue.contact = contact;
+		if (communication) retValue.communication = communication;
+		if (generalPractitioner) retValue.generalPractitioner = generalPractitioner;
+		if (managingOrganization) retValue.managingOrganization = managingOrganization;
+		if (link) retValue.link = link;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>e8557c85-a1ec-4245-ac4f-6650b08d4850</id>
+            <name>createPeriod</name>
+            <revision>4</revision>
+            <lastModified>
+              <time>1679100597141</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createPeriod (start,end) {
+	if (start || end) {
+		var retValue = {};
+		if (start) retValue.start = start;
+		if (end) retValue.end = end;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>a815f5cd-4751-4616-859a-452e0b356dbe</id>
+            <name>createReference</name>
+            <revision>2</revision>
+            <lastModified>
+              <time>1679100811538</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createReference (reference, type, identifier, display) {
+	if(reference || type || identifier || display) {
+		var retValue = {};
+		if (reference) retValue.reference = reference;
+		if (type) retValue.type = type;
+		if (identifier) retValue.identifier = identifier;
+		if (display) retValue.display = display;
+		return retValue
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="4.2.0">
+            <id>c3899563-c59d-40d2-b9e5-8f19277f9960</id>
+            <name>createTelecom</name>
+            <revision>2</revision>
+            <lastModified>
+              <time>1679102565779</time>
+              <timezone>Etc/UTC</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>function createTelecom (system,value,use,rank,period) {
+	if (system||value||use||rank||period) {
+		var retValue = {};
+		if (system) retValue.system = system;
+		if (value) retValue.value = value;
+		if (use) retValue.use = use;
+		if (rank) retValue.rank = rank;
+		if (period) retValue.period = period;
+		return retValue;
+	}
+	else return null;
+}</code>
+            </properties>
+          </codeTemplate>
+        </codeTemplates>
+      </codeTemplateLibrary>
+    </codeTemplateLibraries>
+  </exportData>
+</channel>
