@@ -3,7 +3,7 @@
 
 ## Introduction
 This repository contains sample application to build resilient and higly-available Mirth® Connect by NextGen Healthare on AWS. Mirth Connect interprets messages of any standard into the standard your target system understands. It has capabilities such as:
-1. Filering
+1. Filtering
 2. Transformation
 3. Extraction
 4. Routing
