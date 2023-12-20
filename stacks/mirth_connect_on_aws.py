@@ -22,51 +22,49 @@ class MirthConnectStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
         
-        # Creating a VPC for Mirth connect app to deploy
-        vpc = ec2.Vpc(
-            scope=self,
-            id=cfg.NAME_PREFIX+'-vpc',
-            max_azs=3,
-            ip_addresses = ec2.IpAddresses.cidr(cfg.VPC_CIDR),
-            subnet_configuration=[
-                # modify here to change the types of subnets provisioned as part of the VPC
-                ec2.SubnetConfiguration(
-                    subnet_type=ec2.SubnetType.PUBLIC, 
-                    name=cfg.NAME_PREFIX + "-Public", 
-                    map_public_ip_on_launch=False,
-                    cidr_mask=24
-                ),
-                ec2.SubnetConfiguration(
-                    subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS,
-                    name= cfg.NAME_PREFIX + "-PrivateWithEgress",
-                    cidr_mask=24,
-                ),
-                ec2.SubnetConfiguration(
-                    subnet_type=ec2.SubnetType.PRIVATE_ISOLATED,
-                    name= cfg.NAME_PREFIX + "-PrivateIsolated",
-                    cidr_mask=24,
-                ),
-                
-            ],
-            nat_gateway_provider=ec2.NatProvider.gateway(),
-            nat_gateways=1,  # Only provision 1 NAT GW - default is one per one per AZ
-        )
-  
-        # VPC Endpoint for S3 (Gateway)
-        #s3_gw_vpce = vpc.add_gateway_endpoint("s3GwVpce",service=ec2.GatewayVpcEndpointAwsService.S3)
-        s3_gw_vpce = ec2.GatewayVpcEndpoint(
-            scope=self, 
-            id='s3GwVpce',
-            service=ec2.GatewayVpcEndpointAwsService.S3,
-            vpc=vpc,
-            # optionally limit which subnets will have routes to the endpoint:
-            #subnets=[ec2.SubnetSelection(
-            #    subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT
-            #)]
-        )
+        # VPC carisls-shared-vpc for Mirth connect app to deploy
+     
+        vpc = ec2.Vpc.from_vpc_attributes(
+                scope=self, 
+                id="carisls-shared-vpc",
+                vpc_id="vpc-04c48d386d3bfe0b4",
+                availability_zones=["us-east-1a","us-east-1b"],
+                public_subnet_ids=[
+                    "subnet-01c77cdeb6a8fe63b",
+                    "subnet-09f8f20ff4f67251d"
+                ],
+                private_subnet_ids=[
+                    "subnet-0d9174a43cdbb600d",
+                    "subnet-02e1e51369c0360f2"
+                ],
+            )
+            
+        # Existing VPC Endpoint for S3 (Gateway)
+
+        existing_s3_gw_vpce_id = "vpce-0dfbc863d85d929db"
+
+        # Use existing S3 Gateway VPC endpoint
+
+        s3_gw_vpce = ec2.GatewayVpcEndpoint.from_gateway_vpc_endpoint_id(
+                    self,
+                    "S3GatewayVpce",
+                    gateway_vpc_endpoint_id=existing_s3_gw_vpce_id,
+                )
 
         # print the arn for this VPC
+        CfnOutput(self, "VpcIdOutput", value=vpc.vpc_id)
         CfnOutput(self, "VPC", value=vpc.vpc_arn)
+
+        # Output information about subnets
+        for subnet in vpc.public_subnets:
+            CfnOutput(self, f"PublicSubnet{subnet.availability_zone}", value=subnet.subnet_id)
+
+        for subnet in vpc.private_subnets:
+            CfnOutput(self, f"PrivateSubnet{subnet.availability_zone}", value=subnet.subnet_id)
+
+        for subnet in vpc.isolated_subnets:
+            CfnOutput(self, f"IsolatedSubnet{subnet.availability_zone}", value=subnet.subnet_id)
+        
 
         dbcluster = rds.DatabaseCluster(
             self, "mirth-database",
@@ -87,7 +85,7 @@ class MirthConnectStack(Stack):
                 instance_type=ec2.InstanceType(cfg.RDS_INSTANCE_TYPE),
                 #is_from_legacy_instance_props=True
                 )],
-            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_ISOLATED),
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS),
             vpc=vpc,
         )
   
@@ -124,6 +122,7 @@ class MirthConnectStack(Stack):
             container_ports=container_ports,
             secrets={
                 "DATABASE_PASSWORD": ecs.Secret.from_secrets_manager(dbcluster.secret, field="password")
+
             },
             environment={
                 "MIRTH_ADMIN_PORT": str(cfg.MIRTH_ADMIN_PORT),
@@ -160,10 +159,11 @@ class MirthConnectStack(Stack):
             task_image_options=task_image_props,
             # enable below to be able to exec ssh to the Fargate container
             enable_execute_command=cfg.TASK_ENABLE_EXEC_COMMAND,
-            load_balancers=[ecs_patterns.NetworkLoadBalancerProps(
-                name=cfg.NAME_PREFIX + "NLB",
-                public_load_balancer=cfg.PUBLIC_LOAD_BALANCER,
-                listeners=listeners 
+            load_balancers=[
+                ecs_patterns.NetworkLoadBalancerProps(
+                    name=cfg.NAME_PREFIX + "NLB",
+                    public_load_balancer=cfg.PUBLIC_LOAD_BALANCER,
+                    listeners=listeners 
                 )
             ],
             target_groups=target_groups
@@ -171,8 +171,8 @@ class MirthConnectStack(Stack):
   
         CfnOutput(self, "TaskExecRoleARN", value=fargate_service.task_definition.task_role.role_arn)
 
-        # configure access logging for the load balancer
-        # add additional listeners and target groups to the load balancer, as per the channel port configuration
+         # configure access logging for the load balancer
+         # add additional listeners and target groups to the load balancer, as per the channel port configuration
         for lb in fargate_service.load_balancers:
             lb.log_access_logs(log_bucket, prefix="NLB-Access-Logs")
 
@@ -193,7 +193,7 @@ class MirthConnectStack(Stack):
         for target_group in fargate_service.target_groups:
             target_group.set_attribute('preserve_client_ip.enabled','true')
         
-        # Security Group rules - Admin
+        # # Security Group rules - Admin
         for cidr in cfg.ALLOWED_ADMIN_PEERS :
             fargate_service.service.connections.security_groups[0].add_ingress_rule(
                 peer = ec2.Peer.ipv4(cidr),
@@ -201,7 +201,7 @@ class MirthConnectStack(Stack):
                 description="Allow Admin Port from " + cidr
             )
         
-        # Security Group rules - Channels
+        # # Security Group rules - Channels
         for port, cidrs in cfg.ALLOWED_CHANNEL_PORTS_AND_PEERS.items() :
             for cidr in cidrs :
                 fargate_service.service.connections.security_groups[0].add_ingress_rule(

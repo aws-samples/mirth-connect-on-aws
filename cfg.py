@@ -3,7 +3,7 @@
 
 # Application Configuration
 # Note: changing the APP_NAME will result in a new stack being provisioned
-APP_NAME = "mirth-connect-on-aws"
+APP_NAME = "mirth-connect-on-aws-dev"
 JDBC_CHANNEL_STACK_NAME="mirth-jdbc-channel-example"
 APP_VERSION = "version 0.1"
 CFN_STACK_DESCRIPTION = "MirthConnect on AWS (" + APP_VERSION + ")"
@@ -12,14 +12,14 @@ CFN_JDBC_CHANNEL_STACK_DESCRIPTION = "This stack deploys JDBC to S3 (CSV) channe
 DEPLOY_REGION="us-east-1"
 
 # VPC options
-VPC_CIDR = "10.23.0.0/16" # cidr for the vpc that will be provisioned.
+VPC_CIDR = "10.170.0.0/16" # cidr for the vpc that will be provisioned.
 PUBLIC_LOAD_BALANCER = False # If this is set to True, the NLB will have a public Internet IP address
 
 NAME_PREFIX = "mirth"
 
 # Fargate task defintion parameters
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html
-REGISTRY_IMAGE = "nextgenhealthcare/connect:latest"
+REGISTRY_IMAGE = "nextgenhealthcare/connect:4.4.2"
 TASK_CPU=2048
 TASK_MEMORY_MIB=4096
 TASK_COUNT=1
@@ -33,7 +33,7 @@ DEFAULT_DATABASE_ADMIN_USER="mirthdbadmin"
 RDS_INSTANCE_TYPE="r6g.large"
 
 # mirthconnect options
-MIRTH_REPOSITORY="nextgenhealthcare/connect"
+# MIRTH_REPOSITORY="nextgenhealthcare/connect"
 MIRTH_ADMIN_PORT=8443
 DATABASE_PORT=5432
 
@@ -41,7 +41,7 @@ ALLOWED_ADMIN_PEERS = {
     # used for container port mapping and security groups
     VPC_CIDR, # access from the provisioned VPC 
     # specify additional allowed peers:
-    #"172.31.0.0/16", # Allow from a subnet, in a peered VPC or remote private network.
+    "172.16.0.0/12", # Allow from a subnet, in a peered VPC or remote private network.
     #"123.123.123.123/32", # Allow access from individual IP address, public or private
     #"0.0.0.0/0", # Allow access from anywhere
 }

@@ -1,0 +1,12 @@
+name: Deploy - development
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-infrastructure-staging:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: development
+      version: ${{ github.ref_name }}
+    secrets: inherit

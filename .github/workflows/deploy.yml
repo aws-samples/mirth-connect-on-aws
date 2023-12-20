@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+
+jobs:
+  validate_tag:
+    name: Validate Tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag_exists: ${{ steps.validate_tag.outputs.exists }}
+    steps:
+      - uses: mukunku/tag-exists-action@v1.2.0
+        id: validate_tag
+        with:
+          tag: ${{ inputs.version }}
+      - name: Throw Error
+        if: github.event_name != 'pull_request' && inputs.environment != 'development' && steps.validate_tag.outputs.exists == 'false'
+        run: |
+          echo "::error file=deploy.yml,line=1,col=1,endColumn=2::Only tags must be deployed to staging and production. This workflow was triggered with the ref '${{ inputs.version }}'."
+          exit 1
+
+  deploy_workload_infrastructure:
+    name: Deploy Workload Infrastructure
+    needs: validate_tag
+    strategy:
+      matrix:
+        region: [us-east-1]
+    if: github.event_name == 'pull_request' || inputs.environment == 'development' || needs.validate_tag.outputs.tag_exists == 'true'
+    uses: Caris-Life-Sciences/reusable-workflows/.github/workflows/deploy-cdk.yml@4
+    with:
+      environment: ${{ inputs.environment }}
+      region: ${{ matrix.region }}
+      version: ${{ inputs.version }}
+      cdk_stack_names: MirthConnect
+    secrets:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      cdk_context: |
+        utility_account=${{ secrets.AWS_ACCOUNT_ID_UTILITY }}
