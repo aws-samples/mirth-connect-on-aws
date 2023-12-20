@@ -1,0 +1,32 @@
+name: Preview deployment for PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  # plan_utility:
+  #   name: Plan - Utility
+  #   uses: Caris-Life-Sciences/reusable-workflows/.github/workflows/deploy-cdk.yml@4
+  #   with:
+  #     environment: utility
+  #     region: us-east-1
+  #     version: ${{ github.event.number }}
+  #     cdk_stack_names: MithConnce
+  #   secrets:
+  #     AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  #     cdk_context: |
+  #       workload_accounts=${{ secrets.AWS_ACCOUNT_ID_DEVELOPMENT }},${{ secrets.AWS_ACCOUNT_ID_STAGING }},${{ secrets.AWS_ACCOUNT_ID_PRODUCTION }}
+
+  plan_workload:
+    name: Plan - Workload
+    strategy:
+      matrix:
+        environment: [development]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: ${{ matrix.environment }}
+      version: ${{ github.event.number }}
+    secrets: inherit
